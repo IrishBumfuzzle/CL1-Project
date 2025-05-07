@@ -116,25 +116,22 @@ def tag_mvc(sentences, lvc_iter_id):
                     if (vt is not None) and (vt['xpos'] == 'VAUX') and (vt['lemma'] not in non_verb) \
                         and (vt['head'] == token['id']) and (vt['id']-token['id']==1) and vt['feats']!=None:
                         next_id = token['new_id']
-                        if 'MVC' in str(token['parseme:mwe']):
-                            continue
-                        else:
-                            for sent_id, iter_no in lvc_iter_id.items():
-                                if (vt['new_id'] == sent_id):
-                                    if prev_id == next_id:
-                                        vt['parseme:mwe'] = prev_parse+1
-                                        if token['parseme:mwe'] == '*':
-                                            token['parseme:mwe'] = str(vt['parseme:mwe']) + ':MVC.full'
-                                        else:
-                                            token['parseme:mwe'] = str(token['parseme:mwe'])+';'+str(vt['parseme:mwe'])+':MVC.full'
+                        for sent_id, iter_no in lvc_iter_id.items():
+                            if (vt['new_id'] == sent_id):
+                                if prev_id == next_id:
+                                    vt['parseme:mwe'] = prev_parse+1
+                                    if token['parseme:mwe'] == '*':
+                                        token['parseme:mwe'] = str(vt['parseme:mwe']) + ':MVC.full'
                                     else:
-                                        vt['parseme:mwe'] = iter_no+1
-                                        if token['parseme:mwe'] == '*':
-                                            token['parseme:mwe'] = str(vt['parseme:mwe']) + ':MVC'
-                                        else:
-                                            token['parseme:mwe'] = str(token['parseme:mwe'])+';'+str(vt['parseme:mwe'])+':MVC'
-                                    prev_id = next_id
-                                    prev_parse = vt['parseme:mwe']
+                                        token['parseme:mwe'] = str(token['parseme:mwe'])+';'+str(vt['parseme:mwe'])+':MVC.full'
+                                else:
+                                    vt['parseme:mwe'] = iter_no+1
+                                    if token['parseme:mwe'] == '*':
+                                        token['parseme:mwe'] = str(vt['parseme:mwe']) + ':MVC'
+                                    else:
+                                        token['parseme:mwe'] = str(token['parseme:mwe'])+';'+str(vt['parseme:mwe'])+':MVC'
+                                prev_id = next_id
+                                prev_parse = vt['parseme:mwe']
             del token['new_id'] ### removes the new_id column
     return sentences
 
@@ -148,6 +145,29 @@ for sentence in sentence_mvc:
 #     print(sentence.serialize())
     outfile.writelines(sentence.serialize() + '\n')
 outfile.close()
+
+# --- Accuracy calculation ---
+def calculate_accuracy(predicted_sentences, gold_file_path):
+    with open(gold_file_path, "r", encoding="utf-8") as f:
+        gold_data = f.read()
+    gold_sentences = parse(gold_data)
+
+    total = 0
+    correct = 0
+
+    for pred_sent, gold_sent in zip(predicted_sentences, gold_sentences):
+        for pred_token, gold_token in zip(pred_sent, gold_sent):
+            # Only compare real tokens (skip multiword tokens, comments, etc.)
+            if isinstance(pred_token['id'], int) and isinstance(gold_token['id'], int):
+                total += 1
+                if pred_token['parseme:mwe'] == gold_token['parseme:mwe']:
+                    correct += 1
+
+    accuracy = correct / total if total > 0 else 0
+    print(f"Accuracy: {accuracy:.4f} ({correct}/{total})")
+
+# Call accuracy calculation using the same input file as gold
+calculate_accuracy(sentence_mvc, "../data/dev_cause.cupt")
 
 
 
