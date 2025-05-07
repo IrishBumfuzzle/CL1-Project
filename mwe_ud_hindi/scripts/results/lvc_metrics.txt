@@ -1,0 +1,7 @@
+LIGHT VERB CONSTRUCTION (LVC) METRICS
+=====================================
+
+Accuracy:  0.9997
+Precision: 0.9875
+Recall:    1.0000
+F1-Score:  0.9937
