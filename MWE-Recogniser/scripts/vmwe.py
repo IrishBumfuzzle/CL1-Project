@@ -8,24 +8,18 @@ import seaborn as sns
 from sklearn.metrics import precision_recall_fscore_support, confusion_matrix, accuracy_score
 import datetime
 
-# #### takes .cupt file
-### change the file name and path accordingly
-data_file = open("../data/dev_cause.cupt", "r", encoding="utf-8")
-data = data_file.read()
-list_tokenlist = parse(data)
-for line in list_tokenlist:
-    for token in line:
-        token["parseme:mwe"] = "*"
-
 va_ending = ['वा', 'वाती', 'वाता', 'वाते', 'वाया', 'वाई', 'वायी', 'वाये', 'वाए', 'वाना', 'वाने', 'वानी']
 non_verb = ['हैं', 'है', 'चाह', 'चुक','था','हो', 'रह', 'सक', 'वाला', 'चुका', 'चाहिये', 'चाहिए', 'पा', 'पड़','पड', 'पड़','पड़ेगा', 'चहिए']
 
 # Ensure results directory exists
 def ensure_results_directory():
     """Create results directory if it doesn't exist"""
-    if not os.path.exists("results"):
-        os.makedirs("results")
-    return "results"
+    # Get the directory one level above the script file
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    results_dir = os.path.join(parent_dir, "results")
+    if not os.path.exists(results_dir):
+        os.makedirs(results_dir)
+    return results_dir
 
 # #### following functions:
 # 1. assign_token_id : assigns sentence id to each token for mapping

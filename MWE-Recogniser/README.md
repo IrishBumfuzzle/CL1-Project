@@ -13,15 +13,6 @@ This toolkit provides two main functionalities:
 - Python 3.6 or higher
 - Required Python packages: `conllu`, `numpy`, `pandas`, `matplotlib`, `seaborn`, `sklearn`
 
-## Installation
-
-Clone this repository:
-
-```bash
-git clone https://github.com/yourusername/MWE-Recogniser.git
-cd MWE-Recogniser
-```
-
 ## Running the Tool
 
 The toolkit can be run using the provided bash script:
@@ -45,6 +36,7 @@ This tool uses Hindi raw corpus data from the PARSEME shared task for training t
 - The raw corpus should be placed in `data/raw-corpus/` directory with files named `raw-001.conllu`, `raw-002.conllu`, etc.
 - The first time you run PMI analysis, it will take time to process the corpus files
 - Processed bigrams are cached in a pickle file for faster access in subsequent runs
+- The pickle file is inside the scripts folder by default for easiness
 
 ## Methods
 
