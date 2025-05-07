@@ -17,7 +17,11 @@ def extract_valid_bigrams(conllu_data):
                 valid_bigrams.append((word1, word2))
     return valid_bigrams, []
 
-def load_or_build_training_bigrams(pickle_path='training_bigrams.pkl'):
+def load_or_build_training_bigrams(pickle_path=None):
+    if pickle_path is None:
+        # Use script directory for pickle file
+        pickle_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'training_bigrams.pkl')
+    
     if os.path.exists(pickle_path):
         print(f"Loading cached bigrams from {pickle_path}...")
         with open(pickle_path, 'rb') as pf:
@@ -31,7 +35,9 @@ def load_or_build_training_bigrams(pickle_path='training_bigrams.pkl'):
     from conllu import parse_incr
     
     for i in range(1, 100):
-        file_path = f'../data/raw-corpus/raw-{str(i).zfill(3)}.conllu'
+        # Path to raw corpus files: one level up from script, then into data/raw-corpus/
+        file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+                               'data', 'raw-corpus', f'raw-{str(i).zfill(3)}.conllu')
         if not os.path.exists(file_path):
             continue
             
