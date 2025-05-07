@@ -3,7 +3,7 @@
 from conllu import parse
 
 ### change the file name and path accordingly
-data_file = open("../data/dev.cupt", "r", encoding="utf-8") 
+data_file = open("../data/train.cupt", "r", encoding="utf-8") 
 data = data_file.read()
 list_tokenlist = parse(data)
 # print(list_tokenlist)

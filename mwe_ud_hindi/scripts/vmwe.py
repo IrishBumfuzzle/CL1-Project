@@ -8,8 +8,6 @@ from sklearn.metrics import precision_recall_fscore_support, confusion_matrix, a
 import datetime
 
 # Print current information
-print(f"Current Date and Time (UTC): 2025-05-07 11:52:55")
-print(f"Current User's Login: DivyG007")
 print("")
 
 # #### takes .cupt file
@@ -18,6 +16,9 @@ data_file = open("../data/dev_cause.cupt", "r", encoding="utf-8")
 # data_file = open("data/dev.cupt", "r", encoding="utf-8") 
 data = data_file.read()
 list_tokenlist = parse(data)
+for line in list_tokenlist:
+    for token in line:
+        token["parseme:mwe"] = "*"
 
 va_ending = ['वा', 'वाती', 'वाता', 'वाते', 'वाया', 'वाई', 'वायी', 'वाये', 'वाए', 'वाना', 'वाने', 'वानी']
 non_verb = ['हैं', 'है', 'चाह', 'चुक','था','हो', 'रह', 'सक', 'वाला', 'चुका', 'चाहिये', 'चाहिए', 'पा', 'पड़','पड', 'पड़','पड़ेगा', 'चहिए']
@@ -67,7 +68,7 @@ def tag_lvc(sentences):
             if token['xpos'] == 'VM':
                 next_id = token['new_id']  ### initializing a new variable
                 for nt in sentence:  ### nt-> nount_token
-                    if (nt['head'] == token['id']) and (nt['xpos'] == 'NN') and nt['deprel'] == 'compound'and (nt['parseme:mwe']=='*'):
+                    if (nt['head'] == token['id']) and (nt['xpos'] == 'NN') and nt['deprel'] == 'compound'and (nt['parseme:mwe']== '*'):
                             ### Causative LVCs  -- only va causative
                         if token['form'] !=None and token['feats'] !=None  and any(token['form'].endswith(v) for v in va_ending):
 #                         if token['form'] !=None and token['feats'] !=None  and 'Cause' in token['feats']: ## tags all causatives

@@ -1,7 +1,7 @@
 MULTI-WORD EXPRESSION DETECTION METRICS
 =====================================
 
-Accuracy:  0.9990
-Precision: 0.9856
-Recall:    1.0000
-F1-Score:  0.9927
+Accuracy:  0.9888
+Precision: 0.9726
+Recall:    0.8569
+F1-Score:  0.9111
